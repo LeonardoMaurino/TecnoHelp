@@ -169,3 +169,5 @@ def tema_neon():
 if __name__ == '__main__':
     inicializar_banco()
     app.run(debug=True)
+
+# lets all love lain <3
