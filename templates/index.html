@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>TecnoHelp - Suporte Técnico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1 {
+            color: #0066cc;
+        }
+        input, button {
+            font-size: 18px;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 60%;
+            max-width: 500px;
+        }
+        button:not(#botao-tema) {
+            background-color: #0066cc;
+            color: white;
+            cursor: pointer;
+        }
+        button:not(#botao-tema):hover {
+            background-color: #005bb5;
+        }
+        #resposta-container {
+            margin-top: 30px;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+        #pre-resposta {
+            white-space: pre-wrap;
+            font-size: 16px;
+        }
+        #botao-tema {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            padding: 8px 10px;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.5;
+            z-index: 999;
+        }
+        #botao-tema:hover {
+            opacity: 1;
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>TecnoHelp - Suporte Técnico</h1>
+    <p>Digite sua dúvida técnica abaixo:</p>
+
+    <input type="text" id="pergunta" placeholder="Descreva seu problema...">
+    <br>
+    <button onclick="enviarPergunta()">Enviar</button>
+
+    <div id="resposta-container">
+        <pre id="pre-resposta"></pre>
+    </div>
+
+    <!-- Botão discreto de troca de tema -->
+    <button id="botao-tema" onclick="window.location.href='/neon'" title="Trocar tema">😺</button>
+
+    <script>
+        async function enviarPergunta() {
+            const pergunta = document.getElementById('pergunta').value;
+            const respostaPre = document.getElementById('pre-resposta');
+            respostaPre.textContent = '⏳ Processando...';
+
+            const res = await fetch('/mensagem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario: 'web_user', mensagem: pergunta })
+            });
+
+            const data = await res.json();
+            respostaPre.textContent = data.resposta;
+        }
+    </script>
+</body>
+</html>
