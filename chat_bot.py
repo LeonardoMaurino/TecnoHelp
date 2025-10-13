@@ -12,7 +12,7 @@ DB_CONFIG = {
     'user': 'postgres',
     'password': 'lain'
 }
-
+#test
 GROQ_API_KEY = "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"
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
