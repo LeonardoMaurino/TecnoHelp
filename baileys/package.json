@@ -1,0 +1,15 @@
+{
+  "type": "module",
+  "name": "meu-bot-baileys",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.0",
+    "@whiskeysockets/baileys": "^6.7.9",
+    "pino": "^9.3.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
