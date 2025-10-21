@@ -10,10 +10,10 @@ DB_CONFIG = {
     'host': 'localhost',
     'dbname': 'postgres',
     'user': 'postgres',
-    'password': 'lain'
+    'password': 'insira sua_senha_aqui',
 }
 
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "insira_sua_groq_api_key_aqui"
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
 def get_db_conn():
@@ -169,5 +169,6 @@ def tema_neon():
 if __name__ == '__main__':
     inicializar_banco()
     app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
 
 # lets all love lain <3
