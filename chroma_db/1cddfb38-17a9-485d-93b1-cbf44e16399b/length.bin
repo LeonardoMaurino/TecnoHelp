@@ -1,1 +1,7 @@
-invalid type: string "ta pequenos movimentos (puxadas) quando a máquina está \nem ciclo vazio (cabeçote batendo e servo em repouso). \nCorreção: Ajustar o parâmetro “Offset Ref0” conforme a necessidade.  \nCaminho: SOI – Funções – Gestione Encoder. \n\u{f0b7} Defeito: A máquina somente funciona em automático enquanto o botão “inicio de \nciclo” fica pressionado.  \nm trabalh
+AJUSTE PLACA ( AJUSTE MAX/MIN). DIMMER 
+ 
+ 
+Fita Inferior traseira em repouso 12A em trabalho 18ª 
+Fita Inferior dianteira em repouso 12A em trabalho 18A                                                                  
+Fita superior traseira em repouso 9A em trabalho  15ª                                                                            
+Fita superior dianteira em repouso 9A em trabalh

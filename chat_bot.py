@@ -18,7 +18,7 @@ DB_CONFIG = {
     'password': 'lain',
 }
 
-GROQ_API_KEY = "(*/ω＼*)"
+# aqui vai sua api key "(*/ω＼*)"
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # === Inicializa modelo de embeddings e banco vetorial Chroma ===
