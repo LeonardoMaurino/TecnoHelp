@@ -23,7 +23,7 @@ class InicializadorApp:
 
        
         tk.Label(
-            root, text="Assistente Técnico - Inicialização",
+            root, text="TecnoHelp - Inicialização",
             font=("Segoe UI", 16, "bold"), fg="white", bg="#1e1e1e"
         ).pack(pady=10)
 
