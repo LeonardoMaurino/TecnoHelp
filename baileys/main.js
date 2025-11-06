@@ -52,6 +52,7 @@ async function startBot() {
   //   MENSAGENS RECEBIDAS
   // ==============================
   sock.ev.on("messages.upsert", async (msg) => {
+    if (msg.type !== "notify") return; // teste ignorar duplicatas
     const m = msg.messages[0];
     if (!m.message || m.key.fromMe) return;
 
@@ -61,10 +62,10 @@ async function startBot() {
       m.message.extendedTextMessage?.text ||
       "";
 
-    console.log("======================================");
-    console.log(` Nova mensagem recebida de: ${sender}`);
-    console.log(` Conteúdo: ${text}`);
-    console.log("======================================");
+    //console.log("======================================");
+    //console.log(` Nova mensagem recebida de: ${sender}`);
+    //console.log(` Conteúdo: ${text}`);
+    //console.log("======================================");
 
     // TESTE: responde imediatamente (para ver se o envio funciona)
     //try {
