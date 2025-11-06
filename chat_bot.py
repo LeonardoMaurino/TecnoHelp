@@ -18,7 +18,7 @@ DB_CONFIG = {
     'password': 'lain',
 }
 
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "(*/ω＼*)"
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # === Inicializa modelo de embeddings e banco vetorial Chroma ===
