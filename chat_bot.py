@@ -5,6 +5,7 @@ import PyPDF2
 import requests
 import chromadb
 from sentence_transformers import SentenceTransformer
+import json
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -25,6 +26,8 @@ GROQ_MODEL = "llama-3.3-70b-versatile"
 modelo_embeddings = SentenceTransformer("all-MiniLM-L6-v2")
 chroma_client = chromadb.PersistentClient(path="chroma_db")
 colecao = chroma_client.get_or_create_collection("documentos_pdf")
+
+INDEX_LOG = os.path.join("chroma_db", "indexados.json")
 
 # ===---------------------------------------------------------===
 
@@ -68,18 +71,33 @@ def extrair_texto_pdf(caminho_pdf):
 
 def carregar_pdfs_para_chroma(pasta="pdfs"):
     """Extrai texto dos PDFs e armazena embeddings no ChromaDB."""
-    print("📂 Carregando PDFs e criando embeddings...")
+    print("📂 Verificando PDFs para indexação...")
+
+    # PDFs presentes na pasta
     arquivos = [f for f in os.listdir(pasta) if f.lower().endswith(".pdf")]
 
-    for nome_arquivo in arquivos:
+    # Carrega lista de PDFs já indexados
+    if os.path.exists(INDEX_LOG):
+        with open(INDEX_LOG, "r", encoding="utf-8") as f:
+            indexados = set(json.load(f))
+    else:
+        indexados = set()
+
+    novos_pdfs = [f for f in arquivos if f not in indexados]
+
+    if not novos_pdfs:
+        print("🧩 Nenhum PDF novo detectado — mantendo base atual.")
+        return
+
+    print(f"📘 {len(novos_pdfs)} novos PDFs detectados. Iniciando indexação...\n")
+
+    for nome_arquivo in novos_pdfs:
         caminho = os.path.join(pasta, nome_arquivo)
         texto = extrair_texto_pdf(caminho)
         if not texto:
             continue
 
-        # Quebra o texto em blocos
         blocos = [texto[i:i+1000] for i in range(0, len(texto), 1000)]
-
         embeddings = modelo_embeddings.encode(blocos).tolist()
         ids = [f"{nome_arquivo}_{i}" for i in range(len(blocos))]
 
@@ -89,8 +107,15 @@ def carregar_pdfs_para_chroma(pasta="pdfs"):
             metadatas=[{"arquivo": nome_arquivo}] * len(blocos),
             embeddings=embeddings
         )
-        print(f"✅ {nome_arquivo} indexado ({len(blocos)} blocos)")
-    print("🧠 Base de conhecimento pronta!")
+
+        indexados.add(nome_arquivo)
+        print(f"✅ {nome_arquivo} indexado ({len(blocos)} blocos).")
+
+    # Atualiza o arquivo de controle
+    with open(INDEX_LOG, "w", encoding="utf-8") as f:
+        json.dump(list(indexados), f, ensure_ascii=False, indent=2)
+
+    print("🧠 Base de conhecimento atualizada com sucesso!")
 
 def buscar_contexto(pergunta, top_k=3):
     """Busca os trechos mais relevantes no ChromaDB."""
@@ -110,8 +135,8 @@ def gerar_resposta_groq(pergunta, contexto):
     prompt = (
         f"O usuário perguntou:\n{pergunta}\n\n"
         f"Abaixo estão trechos dos manuais e documentos técnicos:\n{contexto}\n\n"
-        "Com base nesses documentos, responda da forma mais útil e técnica possível, lembre-se de ser breve e direto "
-        "citando o nome do PDF quando relevante."
+        "Com base nesses documentos, responda da forma mais útil e técnica possível, "
+        "lembre-se de ser breve e direto citando o nome do PDF quando relevante."
     )
 
     resposta = requests.post(
@@ -186,11 +211,5 @@ def home():
 
 if __name__ == "__main__":
     inicializar_banco()
-
-    # Carrega os PDFs se o índice estiver vazio
-    if colecao.count() == 0:
-        carregar_pdfs_para_chroma("pdfs")
-    else:
-        print("🧩 Base já existente no ChromaDB — pulando indexação.")
-
+    carregar_pdfs_para_chroma("pdfs")
     app.run(host="0.0.0.0", port=5000, debug=True)
