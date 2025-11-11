@@ -19,7 +19,7 @@ DB_CONFIG = {
     'password': 'lain',
 }
 
-GROQ_API_KEY = "(*/ω＼*)"
+GROQ_API_KEY = "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"
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # === Inicializa modelo de embeddings e banco vetorial Chroma ===
@@ -133,10 +133,13 @@ def buscar_contexto(pergunta, top_k=3):
 def gerar_resposta_groq(pergunta, contexto):
     """Envia prompt contextualizado para o modelo Groq."""
     prompt = (
-        f"O usuário perguntou:\n{pergunta}\n\n"
-        f"Abaixo estão trechos dos manuais e documentos técnicos:\n{contexto}\n\n"
-        "Com base nesses documentos, responda da forma mais útil e técnica possível, "
-        "lembre-se de ser breve e direto citando o nome do PDF quando relevante."
+        "Você é um assistente técnico especializado em manuais e documentos. "
+        "Responda sempre de forma objetiva, em no máximo 12 linhas. "
+        "Cite o nome do PDF a menos que a pergunta do usuario seja irrelevante.\n\n"
+        f"Pergunta do usuário:\n{pergunta}\n\n"
+        f"Trechos disponíveis dos documentos:\n{contexto}\n\n"
+        "Se a pergunta não tiver relação com os documentos, responda de forma breve dizendo que "
+        "não há informações relevantes nos PDFs sobre o assunto, sem citar nomes de arquivos."
     )
 
     resposta = requests.post(
